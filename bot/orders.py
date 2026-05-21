@@ -103,6 +103,21 @@ class OrderManager:
     def __init__(self, client: BinanceFuturesClient | None = None) -> None:
         """Initializes the manager. If client is omitted, spawns a default settings client."""
         self.client = client or BinanceFuturesClient()
+        self._exchange_info = None
+
+    def get_precisions(self, symbol: str) -> tuple[int, int]:
+        """Fetches the price and quantity precision limits for a symbol from the exchange."""
+        if not self._exchange_info:
+            try:
+                self._exchange_info = self.client.get_exchange_info()
+            except Exception as exc:
+                logger.warning(f"Could not fetch exchange info: {exc}")
+                return 2, 3  # Fallback defaults
+
+        for s in self._exchange_info.get("symbols", []):
+            if s.get("symbol") == symbol:
+                return int(s.get("pricePrecision", 2)), int(s.get("quantityPrecision", 3))
+        return 2, 3
 
     def prepare_request(
         self,
@@ -162,22 +177,25 @@ class OrderManager:
             f"Placing order request -> {request.side} {request.quantity} {request.symbol} [{request.order_type}]"
         )
         
-        # Build API payload mapping
+        # Dynamically fetch asset precision
+        price_prec, qty_prec = self.get_precisions(request.symbol)
+        
+        # Build API payload mapping with exact precisions to prevent Binance -1111 errors
         payload: Dict[str, Any] = {
             "symbol": request.symbol,
             "side": request.side,
             "type": request.order_type,
-            "quantity": request.quantity,
+            "quantity": f"{request.quantity:.{qty_prec}f}",
         }
 
         # Inject Limit-specific or Stop-Limit-specific parameters
         if request.order_type == "LIMIT":
-            payload["price"] = request.price
+            payload["price"] = f"{request.price:.{price_prec}f}"
             payload["timeInForce"] = request.time_in_force
             
         elif request.order_type == "STOP_LIMIT":
-            payload["price"] = request.price
-            payload["stopPrice"] = request.stop_price
+            payload["price"] = f"{request.price:.{price_prec}f}"
+            payload["stopPrice"] = f"{request.stop_price:.{price_prec}f}"
             payload["timeInForce"] = request.time_in_force
 
         try:

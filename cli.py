@@ -12,7 +12,6 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 from rich.status import Status
-from rich.pretty import Pretty
 from rich.prompt import Prompt, Confirm, FloatPrompt
 
 from bot.config import settings
@@ -219,7 +218,7 @@ def run_interactive_menu(manager: OrderManager) -> None:
         
         # Output the highlighted JSON block
         console.print("\n[bold dim white]--- [Raw API JSON Response] ---[/bold dim white]")
-        console.print(Pretty(res.raw_response, expand=False, max_depth=2))
+        console.print(res.raw_response)
         
     except APIResponseError as resp_err:
         display_error("Binance Matching Engine Error", resp_err.message)
@@ -294,7 +293,7 @@ def main(
         
         # Output the highlighted JSON block
         console.print("\n[bold dim white]--- [Raw API JSON Response] ---[/bold dim white]")
-        console.print(Pretty(res.raw_response, expand=False))
+        console.print(res.raw_response)
         
     except ValidationError as val_err:
         display_error("Validation Failure", val_err.message)
