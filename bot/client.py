@@ -39,6 +39,7 @@ class BinanceFuturesClient:
             self.base_url = configured_url.rstrip("/")
             
         self.recv_window = recv_window or settings.recv_window
+        self.time_offset = 0
 
     def _headers(self, signed: bool) -> Dict[str, str]:
         """Generates the necessary headers for the API request."""
@@ -69,7 +70,15 @@ class BinanceFuturesClient:
         
         # Inject standard signed endpoint parameters
         if "timestamp" not in payload:
-            payload["timestamp"] = get_timestamp_ms()
+            if self.time_offset == 0:
+                try:
+                    res = self.request("GET", "/fapi/v1/time", signed=False)
+                    if "serverTime" in res:
+                        self.time_offset = res["serverTime"] - get_timestamp_ms()
+                        logger.debug(f"Synced clock with Binance. Offset: {self.time_offset}ms")
+                except Exception as e:
+                    logger.warning(f"Failed to sync time with Binance: {e}")
+            payload["timestamp"] = get_timestamp_ms() + self.time_offset
         if "recvWindow" not in payload:
             payload["recvWindow"] = self.recv_window
 

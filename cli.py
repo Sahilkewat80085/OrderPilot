@@ -211,7 +211,7 @@ def run_interactive_menu(manager: OrderManager) -> None:
     # 9. Dispatch Request
     rprint("\n[dim cyan]* Dispatching order to Binance Futures Testnet...[/dim cyan]")
     try:
-        with console.status("[bold green]Executing matching engine order...", spinner="pulse") as status:
+        with console.status("[bold green]Executing matching engine order...", spinner="dots") as status:
             res = manager.place_order(req)
             
         rprint("\n")
