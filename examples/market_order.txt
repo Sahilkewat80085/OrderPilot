@@ -1,0 +1,47 @@
+=========================================================
+TRADEFORGE DIRECT CLI: MARKET ORDER DISPATCH EXAMPLE
+=========================================================
+
+Command:
+python cli.py --symbol BTCUSDT --side BUY --type MARKET --quantity 0.002
+
+Console Output:
+▶ Preparing Direct Order: BUY 0.002 BTCUSDT MARKET
+▶ Submitting signed API payload...
+
+
+   ▲ CLI ORDER PLACED SUCCESSFULLY ▲   
+┌──────────────────────────────────────┐
+│        Symbol:  BTCUSDT              │
+│          Side:  BUY                  │
+│          Type:  MARKET               │
+│      Order ID:  283194827            │
+│    Client Ref:  tf_1715678901234_abc │
+│        Status:  FILLED               │
+│  Executed Qty:  0.0020               │
+│    Avg Price :  $65,420.5000         │
+└──────────────────────────────────────┘
+
+--- [Raw API JSON Response] ---
+{
+  "orderId": 283194827,
+  "symbol": "BTCUSDT",
+  "status": "FILLED",
+  "clientOrderId": "tf_1715678901234_abc",
+  "price": "0.0000",
+  "avgPrice": "65420.5000",
+  "origQty": "0.0020",
+  "executedQty": "0.0020",
+  "cumQty": "0.0020",
+  "cumQuote": "130.84100",
+  "timeInForce": "GTC",
+  "type": "MARKET",
+  "reduceOnly": false,
+  "side": "BUY",
+  "positionSide": "BOTH",
+  "stopPrice": "0.0000",
+  "workingType": "CONTRACT_PRICE",
+  "priceProtect": false,
+  "origType": "MARKET",
+  "updateTime": 1715678901245
+}

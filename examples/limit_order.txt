@@ -1,0 +1,48 @@
+=========================================================
+TRADEFORGE DIRECT CLI: LIMIT ORDER DISPATCH EXAMPLE
+=========================================================
+
+Command:
+python cli.py --symbol BTCUSDT --side SELL --type LIMIT --quantity 0.005 --price 95000
+
+Console Output:
+▶ Preparing Direct Order: SELL 0.005 BTCUSDT LIMIT
+▶ Submitting signed API payload...
+
+
+     ▲ CLI ORDER PLACED SUCCESSFULLY ▲     
+┌──────────────────────────────────────────┐
+│        Symbol:  BTCUSDT                  │
+│          Side:  SELL                     │
+│          Type:  LIMIT                    │
+│      Order ID:  283194891                │
+│    Client Ref:  tf_1715678910543_xyz     │
+│        Status:  NEW                      │
+│  Executed Qty:  0.0000                   │
+│    Avg Price :  N/A                      │
+│   Limit Price:  $95,000.0000             │
+└──────────────────────────────────────────┘
+
+--- [Raw API JSON Response] ---
+{
+  "orderId": 283194891,
+  "symbol": "BTCUSDT",
+  "status": "NEW",
+  "clientOrderId": "tf_1715678910543_xyz",
+  "price": "95000.0000",
+  "avgPrice": "0.0000",
+  "origQty": "0.0050",
+  "executedQty": "0.0000",
+  "cumQty": "0.0000",
+  "cumQuote": "0.00000",
+  "timeInForce": "GTC",
+  "type": "LIMIT",
+  "reduceOnly": false,
+  "side": "SELL",
+  "positionSide": "BOTH",
+  "stopPrice": "0.0000",
+  "workingType": "CONTRACT_PRICE",
+  "priceProtect": false,
+  "origType": "LIMIT",
+  "updateTime": 1715678910550
+}
